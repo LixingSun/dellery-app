@@ -15,10 +15,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Dellery',
       theme: ThemeData(
+        fontFamily: "Play",
         brightness: Brightness.dark,
         primarySwatch: Colors.amber,
         scaffoldBackgroundColor: Colors.black,
-        cardColor: Colors.grey.shade900.withOpacity(0.8),
       ),
       home: const HomePage(),
     );

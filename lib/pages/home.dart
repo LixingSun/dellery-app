@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:dellery_app/components/card.dart';
+
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -23,14 +25,20 @@ class HomePage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: const [
-                        Expanded(child: Text("1")),
-                        Expanded(child: Text("4")),
+                        Expanded(
+                            child: HomeCard(title: "Highway", child: Text(""))),
+                        Expanded(
+                            child: HomeCard(
+                                title: "Parking Lot", child: Text(""))),
                       ])),
                   Expanded(
                     flex: 2,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: const [Expanded(child: Text("2"))],
+                      children: const [
+                        Expanded(
+                            child: HomeCard(title: "Skillset", child: Text("")))
+                      ],
                     ),
                   ),
                   Expanded(
@@ -38,8 +46,11 @@ class HomePage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: const [
-                        Expanded(child: Text("3")),
-                        Expanded(child: Text("5")),
+                        Expanded(
+                            child: HomeCard(title: "Radio", child: Text(""))),
+                        Expanded(
+                            child:
+                                HomeCard(title: "Rest Area", child: Text(""))),
                       ])),
                 ])));
   }
