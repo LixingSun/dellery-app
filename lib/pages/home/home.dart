@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
                       child: HomeCard(
                           title: "Highway",
                           child: HighwayContent(
-                              ongoingList: localStorage.store.inProgressList))),
+                              ongoingList: localStorage.inProgressList))),
                   const Expanded(
                       child: HomeCard(title: "Parking Lot", child: Text(""))),
                 ])),
@@ -74,23 +74,10 @@ class _HomePageState extends State<HomePage> {
           ])),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          final newStore = localStorage.store;
-          newStore.inProgressList = [
-            OngoingItem(
-                title: "Test 1",
-                percent: Random().nextDouble(),
-                type: OngoingTypes.book),
-            OngoingItem(
-                title: "Test 2",
-                percent: Random().nextDouble(),
-                type: OngoingTypes.book),
-            OngoingItem(
-                title: "Test 3",
-                percent: Random().nextDouble(),
-                type: OngoingTypes.article)
-          ];
-
-          localStorage.writeStore(newStore);
+          localStorage.addInProgressItem(OngoingItem(
+              title: 'Test ${Random().nextInt(20)}',
+              percent: Random().nextDouble(),
+              type: OngoingTypes.book));
         },
         tooltip: 'Increment',
         child: const Icon(Icons.add),

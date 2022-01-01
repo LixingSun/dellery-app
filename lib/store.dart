@@ -2,9 +2,37 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:convert';
 
-import 'package:dellery_app/pages/home/highway.dart';
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+
+enum OngoingTypes { book, article }
+
+Map<OngoingTypes, IconData> typeMap = {
+  OngoingTypes.book: Icons.book,
+  OngoingTypes.article: Icons.article
+};
+
+class OngoingItem {
+  String title;
+  double percent;
+  OngoingTypes type;
+
+  OngoingItem({required this.title, required this.percent, required this.type});
+
+  factory OngoingItem.fromJson(Map<String, dynamic> json) {
+    final typeValue = EnumToString.fromString(
+            OngoingTypes.values, json['type'] as String);
+
+    return OngoingItem(
+        title: json['title'] as String,
+        percent: json['percent'] as double,
+        type: typeValue ?? OngoingTypes.book);
+  }
+
+  Map<String, dynamic> toJson() =>
+      {'title': title, 'percent': percent, 'type': type.toString()};
+}
 
 class StoreObject {
   List<OngoingItem> inProgressList;
@@ -24,6 +52,10 @@ class StoreObject {
 
 class LocalStorage extends ChangeNotifier {
   StoreObject store = StoreObject();
+
+  List<OngoingItem> get inProgressList {
+    return store.inProgressList;
+  }
 
   Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
@@ -54,11 +86,14 @@ class LocalStorage extends ChangeNotifier {
     }
   }
 
-  Future<File> writeStore(StoreObject newStore) async {
-    store = newStore;
-
+  void addInProgressItem(OngoingItem newItem) {
+    store.inProgressList.add(newItem);
     notifyListeners();
+    
+    writeStore(store);
+  }
 
+  Future<File> writeStore(StoreObject newStore) async {
     stderr.writeln("write");
 
     final file = await _localFile;

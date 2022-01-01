@@ -1,6 +1,8 @@
-import 'package:enum_to_string/enum_to_string.dart';
+
 import 'package:flutter/material.dart';
 import 'package:dellery_app/components/progress_bar.dart';
+
+import '../../store.dart';
 
 class HighwayContent extends StatefulWidget {
   const HighwayContent({Key? key, required this.ongoingList}) : super(key: key);
@@ -9,34 +11,6 @@ class HighwayContent extends StatefulWidget {
 
   @override
   _HighwayContentState createState() => _HighwayContentState();
-}
-
-enum OngoingTypes { book, article }
-
-Map<OngoingTypes, IconData> typeMap = {
-  OngoingTypes.book: Icons.book,
-  OngoingTypes.article: Icons.article
-};
-
-class OngoingItem {
-  String title;
-  double percent;
-  OngoingTypes type;
-
-  OngoingItem({required this.title, required this.percent, required this.type});
-
-  factory OngoingItem.fromJson(Map<String, dynamic> json) {
-    final typeValue = EnumToString.fromString(
-            OngoingTypes.values, json['type'] as String);
-
-    return OngoingItem(
-        title: json['title'] as String,
-        percent: json['percent'] as double,
-        type: typeValue ?? OngoingTypes.book);
-  }
-
-  Map<String, dynamic> toJson() =>
-      {'title': title, 'percent': percent, 'type': type.toString()};
 }
 
 class _HighwayContentState extends State<HighwayContent> {
