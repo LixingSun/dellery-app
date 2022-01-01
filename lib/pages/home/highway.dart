@@ -1,8 +1,11 @@
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
 import 'package:dellery_app/components/progress_bar.dart';
 
 class HighwayContent extends StatefulWidget {
-  const HighwayContent({Key? key}) : super(key: key);
+  const HighwayContent({Key? key, required this.ongoingList}) : super(key: key);
+
+  final List<OngoingItem> ongoingList;
 
   @override
   _HighwayContentState createState() => _HighwayContentState();
@@ -20,24 +23,31 @@ class OngoingItem {
   double percent;
   OngoingTypes type;
 
-  OngoingItem(this.title, this.percent, this.type);
+  OngoingItem({required this.title, required this.percent, required this.type});
+
+  factory OngoingItem.fromJson(Map<String, dynamic> json) {
+    final typeValue = EnumToString.fromString(
+            OngoingTypes.values, json['type'] as String);
+
+    return OngoingItem(
+        title: json['title'] as String,
+        percent: json['percent'] as double,
+        type: typeValue ?? OngoingTypes.book);
+  }
+
+  Map<String, dynamic> toJson() =>
+      {'title': title, 'percent': percent, 'type': type.toString()};
 }
 
 class _HighwayContentState extends State<HighwayContent> {
-  final List<OngoingItem> _ongoingList = [
-    OngoingItem("Test 1", 0.5, OngoingTypes.book),
-    OngoingItem("Test 2", 0.5, OngoingTypes.book),
-    OngoingItem("Test 3", 0.5, OngoingTypes.article)
-  ];
-
   Widget _buildBody() {
     return ListView.builder(
-        itemCount: _ongoingList.length,
+        itemCount: widget.ongoingList.length,
         itemBuilder: (context, index) {
           return ProgressBar(
-              title: _ongoingList[index].title,
-              percent: _ongoingList[index].percent,
-              icon: Icon(typeMap[_ongoingList[index].type]));
+              title: widget.ongoingList[index].title,
+              percent: widget.ongoingList[index].percent,
+              icon: Icon(typeMap[widget.ongoingList[index].type]));
         });
   }
 

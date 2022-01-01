@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 
+import 'package:dellery_app/store.dart';
 import 'package:dellery_app/pages/home/home.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+    create: (context) => LocalStorage(),
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -12,15 +17,17 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Dellery',
-      theme: ThemeData(
-        fontFamily: "Play",
-        brightness: Brightness.dark,
-        primarySwatch: Colors.amber,
-        scaffoldBackgroundColor: Colors.black,
-      ),
-      home: const HomePage(),
-    );
+    return Consumer<LocalStorage>(builder: (context, localStorage, child) {
+      return MaterialApp(
+        title: 'Dellery',
+        theme: ThemeData(
+          fontFamily: "Play",
+          brightness: Brightness.dark,
+          primarySwatch: Colors.amber,
+          scaffoldBackgroundColor: Colors.black,
+        ),
+        home: HomePage(localStorage: localStorage),
+      );
+    });
   }
 }
