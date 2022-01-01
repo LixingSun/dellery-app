@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:dellery_app/pages/home.dart';
+import 'package:dellery_app/pages/home/home.dart';
 
 void main() {
   runApp(const MyApp());
