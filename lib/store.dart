@@ -93,6 +93,13 @@ class LocalStorage extends ChangeNotifier {
     writeStore(store);
   }
 
+  void deleteInProgressItem(OngoingItem newItem) {
+    store.inProgressList.remove(newItem);
+    notifyListeners();
+    
+    writeStore(store);
+  }
+
   Future<File> writeStore(StoreObject newStore) async {
     stderr.writeln("write");
 

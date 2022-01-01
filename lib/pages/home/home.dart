@@ -49,7 +49,9 @@ class _HomePageState extends State<HomePage> {
                       child: HomeCard(
                           title: "Highway",
                           child: HighwayContent(
-                              ongoingList: localStorage.inProgressList))),
+                            ongoingList: localStorage.inProgressList,
+                            localStorage: localStorage,
+                          ))),
                   const Expanded(
                       child: HomeCard(title: "Parking Lot", child: Text(""))),
                 ])),
