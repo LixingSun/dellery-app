@@ -37,6 +37,12 @@ dependencies:
 
   percent_indicator: ^3.4.0
 
+  path_provider: ^2.0.8
+
+  provider: ^6.0.0
+
+  enum_to_string: ^2.0.1 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
