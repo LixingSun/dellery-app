@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:dellery_app/components/card.dart';
+import 'package:dellery_app/pages/home/highway.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -26,7 +27,7 @@ class HomePage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: const [
                         Expanded(
-                            child: HomeCard(title: "Highway", child: Text(""))),
+                            child: HomeCard(title: "Highway", child: HighwayContent())),
                         Expanded(
                             child: HomeCard(
                                 title: "Parking Lot", child: Text(""))),
