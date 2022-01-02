@@ -47,14 +47,14 @@ class _HomePageState extends State<HomePage> {
                     children: [
                   Expanded(
                       child: HomeCard(
-                          title: "Highway",
+                          title: "进展/Highway",
                           child: HighwayContent(
                             ongoingList: localStorage.inProgressList,
                             localStorage: localStorage,
                           ))),
                   Expanded(
                       child: HomeCard(
-                          title: "Parking Lot",
+                          title: "待办/Parking Lot",
                           child: ParkingLotContent(
                             toDoList: localStorage.toDoList,
                             localStorage: localStorage,
@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   Expanded(
                       child: HomeCard(
-                          title: "Skillset",
+                          title: "技能/Skillset",
                           child: SkillsetContent(
                               skillset: localStorage.skillset,
                               localStorage: localStorage)))
@@ -79,9 +79,9 @@ class _HomePageState extends State<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: const [
-                  Expanded(child: HomeCard(title: "Radio", child: Text(""))),
+                  Expanded(child: HomeCard(title: "潮流/Radio", child: Text(""))),
                   Expanded(
-                      child: HomeCard(title: "Rest Area", child: Text(""))),
+                      child: HomeCard(title: "工具/Rest Area", child: Text(""))),
                 ])),
           ])),
     );

@@ -1,3 +1,4 @@
+import 'package:dellery_app/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_radar_chart/flutter_radar_chart.dart';
 
@@ -35,10 +36,10 @@ class _SkillsetContentState extends State<SkillsetContent> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: IconButton(
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.add,
                     size: 24,
-                    color: Colors.green,
+                    color: toolColor,
                   ),
                   iconSize: 24,
                   onPressed: () {
@@ -108,10 +109,10 @@ class _SkillsetContentState extends State<SkillsetContent> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: IconButton(
-                icon: const Icon(
+                icon: Icon(
                   Icons.edit,
                   size: 24,
-                  color: Colors.green,
+                  color: toolColor,
                 ),
                 iconSize: 24,
                 onPressed: () {

@@ -19,6 +19,7 @@ class HomeCard extends StatelessWidget {
               title.toUpperCase(),
               textAlign: TextAlign.center,
               style: const TextStyle(
+                fontFamilyFallback: ['ZCOOLKuaiLe'],
                   fontWeight: FontWeight.bold, fontSize: 24, height: 2),
             ),
           ),

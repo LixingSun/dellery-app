@@ -37,7 +37,7 @@ class ProgressBar extends StatelessWidget {
               leading: Icon(
                 icon,
                 size: 20,
-                color: Colors.yellow.shade200,
+                color: Colors.grey[400],
               ),
               center: Text(title, style: const TextStyle(fontSize: 16))),
         ));
