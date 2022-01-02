@@ -97,7 +97,7 @@ class _ParkingLotContentState extends State<ParkingLotContent> {
             label: Icon(
               Icons.add,
               size: 16,
-              color: Colors.amber,
+              color: Colors.green,
             ))));
 
     return Wrap(spacing: 12, runSpacing: 12, children: list);

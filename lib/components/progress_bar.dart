@@ -31,13 +31,13 @@ class ProgressBar extends StatelessWidget {
           child: LinearPercentIndicator(
               linearStrokeCap: LinearStrokeCap.butt,
               lineHeight: 40.0,
-              progressColor: Colors.deepPurple.shade700,
+              progressColor: Colors.yellow.shade800,
               backgroundColor: Colors.grey[800],
               percent: percent,
               leading: Icon(
                 icon,
                 size: 20,
-                color: Colors.deepPurple.shade200,
+                color: Colors.yellow.shade200,
               ),
               center: Text(title, style: const TextStyle(fontSize: 16))),
         ));

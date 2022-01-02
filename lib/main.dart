@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           fontFamily: "Play",
           brightness: Brightness.dark,
-          primarySwatch: Colors.amber,
+          primarySwatch: Colors.green,
           scaffoldBackgroundColor: Colors.black,
         ),
         home: HomePage(localStorage: localStorage),
