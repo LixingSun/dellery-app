@@ -6,14 +6,14 @@ class ProgressBar extends StatelessWidget {
     Key? key,
     required this.title,
     required this.percent,
-    required this.icon,
+    this.icon = Icons.question_answer,
     required this.onEdit,
     required this.onDelete,
   }) : super(key: key);
 
   final String title;
   final double percent;
-  final Widget icon;
+  final IconData? icon;
   final Function onEdit;
   final Function onDelete;
 
@@ -31,10 +31,14 @@ class ProgressBar extends StatelessWidget {
           child: LinearPercentIndicator(
               linearStrokeCap: LinearStrokeCap.butt,
               lineHeight: 40.0,
-              progressColor: Colors.deepPurple.shade600,
+              progressColor: Colors.deepPurple.shade700,
               backgroundColor: Colors.grey[800],
               percent: percent,
-              trailing: icon,
+              leading: Icon(
+                icon,
+                size: 20,
+                color: Colors.deepPurple.shade200,
+              ),
               center: Text(title, style: const TextStyle(fontSize: 16))),
         ));
   }
