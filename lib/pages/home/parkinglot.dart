@@ -29,8 +29,30 @@ class _ParkingLotContentState extends State<ParkingLotContent> {
   Widget build(BuildContext context) {
     final list = widget.toDoList.map((toDoItem) {
       return GestureDetector(
-          onTap: () {},
-          onHorizontalDragEnd: (details) {},
+          onHorizontalDragEnd: (details) {
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: const Text("Create"),
+                    content: Text('Confirm to delete the $toDoItem'),
+                    actions: [
+                      TextButton(
+                          child: const Text("SAVE"),
+                          onPressed: () {
+                            Navigator.pop(context);
+                            widget.localStorage
+                                .deleteToDoItem(toDoItem);
+                          }),
+                      TextButton(
+                          child: const Text("CANCEL"),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          })
+                    ],
+                  );
+                });
+          },
           child: Chip(label: Text(toDoItem)));
     }).toList();
 
