@@ -35,7 +35,7 @@ class _HighwayContentState extends State<HighwayContent> {
             return ProgressBar(
               title: ongoingList[index].title,
               percent: ongoingList[index].percent,
-              icon: Icon(typeMap[ongoingList[index].type]),
+              icon: typeMap[ongoingList[index].type],
               onEdit: () {
                 titleController.text = ongoingList[index].title;
                 percentController.text = ongoingList[index].percent.toString();
@@ -153,7 +153,7 @@ class _HighwayContentState extends State<HighwayContent> {
           }),
       Center(
         child: TextButton(
-          child: const Text("ADD"),
+          child: const Icon(Icons.add, size: 20,),
           onPressed: () {
             titleController.text = "";
             percentController.text = '0';
