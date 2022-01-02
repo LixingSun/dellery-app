@@ -1,3 +1,4 @@
+import 'package:dellery_app/pages/home/parkinglot.dart';
 import 'package:flutter/material.dart';
 
 import 'package:dellery_app/components/card.dart';
@@ -50,8 +51,11 @@ class _HomePageState extends State<HomePage> {
                             ongoingList: localStorage.inProgressList,
                             localStorage: localStorage,
                           ))),
-                  const Expanded(
-                      child: HomeCard(title: "Parking Lot", child: Text(""))),
+                  Expanded(
+                      child: HomeCard(title: "Parking Lot", child: ParkingLotContent(
+                        toDoList: localStorage.toDoList,
+                        localStorage: localStorage,
+                      ))),
                 ])),
             Expanded(
               flex: 2,
