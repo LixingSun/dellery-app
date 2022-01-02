@@ -119,6 +119,13 @@ class LocalStorage extends ChangeNotifier {
     writeStore(store);
   }
 
+  void addToDoItem(newItem) {
+    store.toDoList.add(newItem);
+    notifyListeners();
+
+    writeStore(store);
+  }
+
   Future<File> writeStore(StoreObject newStore) async {
     stderr.writeln("write");
 

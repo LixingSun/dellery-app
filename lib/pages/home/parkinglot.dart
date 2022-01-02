@@ -15,19 +15,68 @@ class ParkingLotContent extends StatefulWidget {
 }
 
 class _ParkingLotContentState extends State<ParkingLotContent> {
+  final titleController = TextEditingController();
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is removed from the
+    // widget tree.
+    titleController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final list = widget.toDoList.map((toDoItem) {
-      return Chip(label: Text(toDoItem));
+      return GestureDetector(
+          onTap: () {},
+          onHorizontalDragEnd: (details) {},
+          child: Chip(label: Text(toDoItem)));
     }).toList();
 
-    list.add(const Chip(
-        backgroundColor: Colors.transparent,
-        label: Icon(
-          Icons.add,
-          size: 16,
-          color: Colors.amber,
-        )));
+    list.add(GestureDetector(
+        onTap: () {
+          titleController.text = "";
+
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: const Text("Create"),
+                  content: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: TextFormField(
+                      controller: titleController,
+                      decoration: const InputDecoration(
+                        labelText: 'Title',
+                        border: OutlineInputBorder(),
+                        hintText: 'Enter the title',
+                      ),
+                    ),
+                  ),
+                  actions: [
+                    TextButton(
+                        child: const Text("SAVE"),
+                        onPressed: () {
+                          Navigator.pop(context);
+                          widget.localStorage.addToDoItem(titleController.text);
+                        }),
+                    TextButton(
+                        child: const Text("CANCEL"),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        })
+                  ],
+                );
+              });
+        },
+        child: const Chip(
+            backgroundColor: Colors.transparent,
+            label: Icon(
+              Icons.add,
+              size: 16,
+              color: Colors.amber,
+            ))));
 
     return Wrap(spacing: 12, runSpacing: 12, children: list);
   }
