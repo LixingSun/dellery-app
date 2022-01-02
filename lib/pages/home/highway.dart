@@ -1,3 +1,4 @@
+import 'package:dellery_app/constants/colors.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
 import 'package:dellery_app/components/progress_bar.dart';
@@ -153,7 +154,11 @@ class _HighwayContentState extends State<HighwayContent> {
           }),
       Center(
         child: TextButton(
-          child: const Icon(Icons.add, size: 20,),
+          child: Icon(
+            Icons.add,
+            size: 20,
+            color: toolColor,
+          ),
           onPressed: () {
             titleController.text = "";
             percentController.text = '0';

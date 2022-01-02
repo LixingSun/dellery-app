@@ -107,3 +107,6 @@ flutter:
         - asset: fonts/Play-Regular.ttf
         - asset: fonts/Play-Bold.ttf
           weight: 700
+    - family: ZCOOLKuaiLe
+      fonts:
+        - asset: fonts/ZCOOLKuaiLe-Regular.ttf

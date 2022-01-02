@@ -1,3 +1,4 @@
+import 'package:dellery_app/constants/colors.dart';
 import 'package:flutter/material.dart';
 
 import '../../store.dart';
@@ -41,8 +42,7 @@ class _ParkingLotContentState extends State<ParkingLotContent> {
                           child: const Text("SAVE"),
                           onPressed: () {
                             Navigator.pop(context);
-                            widget.localStorage
-                                .deleteToDoItem(toDoItem);
+                            widget.localStorage.deleteToDoItem(toDoItem);
                           }),
                       TextButton(
                           child: const Text("CANCEL"),
@@ -92,12 +92,12 @@ class _ParkingLotContentState extends State<ParkingLotContent> {
                 );
               });
         },
-        child: const Chip(
+        child: Chip(
             backgroundColor: Colors.transparent,
             label: Icon(
               Icons.add,
-              size: 16,
-              color: Colors.green,
+              size: 20,
+              color: toolColor,
             ))));
 
     return Wrap(spacing: 12, runSpacing: 12, children: list);
