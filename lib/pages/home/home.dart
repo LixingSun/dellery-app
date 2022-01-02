@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 
 import 'package:dellery_app/components/card.dart';
@@ -74,16 +72,6 @@ class _HomePageState extends State<HomePage> {
                       child: HomeCard(title: "Rest Area", child: Text(""))),
                 ])),
           ])),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          localStorage.addInProgressItem(OngoingItem(
-              title: 'Test ${Random().nextInt(20)}',
-              percent: Random().nextDouble(),
-              type: OngoingTypes.book));
-        },
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
     );
   }
 }

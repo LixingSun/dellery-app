@@ -6,11 +6,12 @@ import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
-enum OngoingTypes { book, article }
+enum OngoingTypes { book, article, course }
 
 Map<OngoingTypes, IconData> typeMap = {
   OngoingTypes.book: Icons.book,
-  OngoingTypes.article: Icons.article
+  OngoingTypes.article: Icons.article,
+  OngoingTypes.course: Icons.fact_check,
 };
 
 class OngoingItem {
@@ -22,7 +23,7 @@ class OngoingItem {
 
   factory OngoingItem.fromJson(Map<String, dynamic> json) {
     final typeValue = EnumToString.fromString(
-            OngoingTypes.values, json['type'] as String);
+        OngoingTypes.values, json['type'].toString().split('.')[1]);
 
     return OngoingItem(
         title: json['title'] as String,
@@ -41,8 +42,7 @@ class StoreObject {
 
   factory StoreObject.fromJson(Map<String, dynamic> json) {
     final List data = json['inProgressList'] as List<dynamic>;
-    final list =
-        data.map((item) => OngoingItem.fromJson(item)).toList();
+    final list = data.map((item) => OngoingItem.fromJson(item)).toList();
 
     return StoreObject(inProgressList: list);
   }
@@ -89,14 +89,21 @@ class LocalStorage extends ChangeNotifier {
   void addInProgressItem(OngoingItem newItem) {
     store.inProgressList.add(newItem);
     notifyListeners();
-    
+
     writeStore(store);
   }
 
-  void deleteInProgressItem(OngoingItem newItem) {
-    store.inProgressList.remove(newItem);
+  void deleteInProgressItem(OngoingItem item) {
+    store.inProgressList.remove(item);
     notifyListeners();
-    
+
+    writeStore(store);
+  }
+
+  void updateInProgressItem(index, OngoingItem newItem) {
+    store.inProgressList[index] = newItem;
+    notifyListeners();
+
     writeStore(store);
   }
 
