@@ -37,17 +37,24 @@ class OngoingItem {
 
 class StoreObject {
   List<OngoingItem> inProgressList;
+  List<String> toDoList;
 
-  StoreObject({this.inProgressList = const <OngoingItem>[]});
+  StoreObject(
+      {this.inProgressList = const <OngoingItem>[],
+      this.toDoList = const <String>[]});
 
   factory StoreObject.fromJson(Map<String, dynamic> json) {
-    final List data = json['inProgressList'] as List<dynamic>;
-    final list = data.map((item) => OngoingItem.fromJson(item)).toList();
+    final inProgressData = json['inProgressList'] as List<dynamic>;
+    final toDoData = json['toDoList'] as List<dynamic>;
 
-    return StoreObject(inProgressList: list);
+    return StoreObject(
+        inProgressList:
+            inProgressData.map((item) => OngoingItem.fromJson(item)).toList(),
+        toDoList: toDoData.map((item) => item.toString()).toList());
   }
 
-  Map<String, dynamic> toJson() => {'inProgressList': inProgressList};
+  Map<String, dynamic> toJson() =>
+      {'inProgressList': inProgressList, 'toDoList': toDoList};
 }
 
 class LocalStorage extends ChangeNotifier {
@@ -55,6 +62,10 @@ class LocalStorage extends ChangeNotifier {
 
   List<OngoingItem> get inProgressList {
     return store.inProgressList;
+  }
+
+  List<String> get toDoList {
+    return store.toDoList;
   }
 
   Future<String> get _localPath async {
@@ -79,6 +90,7 @@ class LocalStorage extends ChangeNotifier {
 
       store = StoreObject.fromJson(json.decode(contents));
     } catch (e) {
+      stderr.writeln(e);
       // If encountering an error, return 0
       store = StoreObject();
     } finally {
