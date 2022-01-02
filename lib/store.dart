@@ -165,6 +165,13 @@ class LocalStorage extends ChangeNotifier {
     writeStore(store);
   }
 
+  void addSkillset(SkillItem newValue) {
+    store.skillset.add(newValue);
+    notifyListeners();
+
+    writeStore(store);
+  }
+
   Future<File> writeStore(StoreObject newStore) async {
     stderr.writeln("write");
 

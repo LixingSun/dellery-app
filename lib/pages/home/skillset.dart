@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_radar_chart/flutter_radar_chart.dart';
 
@@ -19,7 +17,6 @@ class SkillsetContent extends StatefulWidget {
 
 class _SkillsetContentState extends State<SkillsetContent> {
   final ticks = [1, 2, 3, 4, 5];
-  List<SkillItem> tempSkills = [];
 
   @override
   Widget build(BuildContext context) {
@@ -33,83 +30,163 @@ class _SkillsetContentState extends State<SkillsetContent> {
           child:
               RadarChart.dark(ticks: ticks, features: features, data: [data])),
       Padding(
-        padding: const EdgeInsets.only(bottom: 20),
-        child: IconButton(
-          icon: const Icon(
-            Icons.edit,
-            size: 24,
-            color: Colors.green,
-          ),
-          iconSize: 24,
-          onPressed: () {
-            tempSkills = List.from(widget.skillset);
+          padding: const EdgeInsets.only(bottom: 20),
+          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: IconButton(
+                  icon: const Icon(
+                    Icons.add,
+                    size: 24,
+                    color: Colors.green,
+                  ),
+                  iconSize: 24,
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          final newSkill = SkillItem(title: "", rating: 0);
 
-            showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    title: const Text("Edit Skillset"),
-                    content: SingleChildScrollView(
-                        child: Column(
-                            children: List.generate(tempSkills.length, (index) {
-                      return Row(
-                        children: [
-                          Container(
-                            width: 200,
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                            child: TextFormField(
-                              initialValue: tempSkills[index].title,
-                              decoration: const InputDecoration(
-                                labelText: 'Title',
-                                hintText: '',
-                              ),
-                              onChanged: (value) {
-                                stderr.writeln(value);
-                                setState(() {
-                                  tempSkills[index].title = value;
-                                });
-                              },
+                          return AlertDialog(
+                            title: const Text("Add Skillset"),
+                            content: Row(
+                              children: [
+                                Container(
+                                  width: 200,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 4),
+                                  child: TextFormField(
+                                    initialValue: newSkill.title,
+                                    decoration: const InputDecoration(
+                                      labelText: 'Title',
+                                      hintText: '',
+                                    ),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        newSkill.title = value;
+                                      });
+                                    },
+                                  ),
+                                ),
+                                Container(
+                                  width: 100,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 4),
+                                  child: TextFormField(
+                                    initialValue: newSkill.rating.toString(),
+                                    decoration: const InputDecoration(
+                                      labelText: 'Rating',
+                                      hintText: 'Enter the rating',
+                                    ),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        newSkill.rating = int.parse(
+                                            value.isEmpty ? '0' : value);
+                                      });
+                                    },
+                                  ),
+                                )
+                              ],
                             ),
-                          ),
-                          Container(
-                            width: 100,
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                            child: TextFormField(
-                              initialValue: tempSkills[index].rating.toString(),
-                              decoration: const InputDecoration(
-                                labelText: 'Rating',
-                                hintText: 'Enter the rating',
-                              ),
-                              onChanged: (value) {
-                                stderr.writeln(value);
-                                setState(() {
-                                  tempSkills[index].rating = int.parse(value.isEmpty ? '0' : value);
-                                });
-                              },
-                            ),
-                          )
-                        ],
-                      );
-                    }).toList())),
-                    actions: [
-                      TextButton(
-                          child: const Text("SAVE"),
-                          onPressed: () {
-                            Navigator.pop(context);
-                            stderr.writeln(tempSkills.toString());
-                            widget.localStorage.updateSkillset(tempSkills);
-                          }),
-                      TextButton(
-                          child: const Text("CANCEL"),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          })
-                    ],
-                  );
-                });
-          },
-        ),
-      )
+                            actions: [
+                              TextButton(
+                                  child: const Text("SAVE"),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    widget.localStorage.addSkillset(newSkill);
+                                  }),
+                              TextButton(
+                                  child: const Text("CANCEL"),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  })
+                            ],
+                          );
+                        });
+                  }),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: IconButton(
+                icon: const Icon(
+                  Icons.edit,
+                  size: 24,
+                  color: Colors.green,
+                ),
+                iconSize: 24,
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        List<SkillItem> tempSkills = List.from(widget.skillset);
+
+                        return AlertDialog(
+                          title: const Text("Edit Skillset"),
+                          content: SingleChildScrollView(
+                              child: Column(
+                                  children:
+                                      List.generate(tempSkills.length, (index) {
+                            return Row(
+                              children: [
+                                Container(
+                                  width: 200,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 4),
+                                  child: TextFormField(
+                                    initialValue: tempSkills[index].title,
+                                    decoration: const InputDecoration(
+                                      labelText: 'Title',
+                                      hintText: '',
+                                    ),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        tempSkills[index].title = value;
+                                      });
+                                    },
+                                  ),
+                                ),
+                                Container(
+                                  width: 100,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 4),
+                                  child: TextFormField(
+                                    initialValue:
+                                        tempSkills[index].rating.toString(),
+                                    decoration: const InputDecoration(
+                                      labelText: 'Rating',
+                                      hintText: 'Enter the rating',
+                                    ),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        tempSkills[index].rating = int.parse(
+                                            value.isEmpty ? '0' : value);
+                                      });
+                                    },
+                                  ),
+                                )
+                              ],
+                            );
+                          }).toList())),
+                          actions: [
+                            TextButton(
+                                child: const Text("SAVE"),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  widget.localStorage
+                                      .updateSkillset(tempSkills);
+                                }),
+                            TextButton(
+                                child: const Text("CANCEL"),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                })
+                          ],
+                        );
+                      });
+                },
+              ),
+            )
+          ]))
     ]);
   }
 }
