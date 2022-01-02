@@ -35,26 +35,47 @@ class OngoingItem {
       {'title': title, 'percent': percent, 'type': type.toString()};
 }
 
+class SkillItem {
+  String title;
+  int rating;
+
+  SkillItem({required this.title, required this.rating});
+
+  factory SkillItem.fromJson(Map<String, dynamic> json) {
+    return SkillItem(
+        title: json['title'], rating: int.parse(json['rating'].toString()));
+  }
+
+  Map<String, dynamic> toJson() => {'title': title, 'rating': rating};
+}
+
 class StoreObject {
   List<OngoingItem> inProgressList;
   List<String> toDoList;
+  List<SkillItem> skillset;
 
   StoreObject(
       {this.inProgressList = const <OngoingItem>[],
-      this.toDoList = const <String>[]});
+      this.toDoList = const <String>[],
+      this.skillset = const <SkillItem>[]});
 
   factory StoreObject.fromJson(Map<String, dynamic> json) {
     final inProgressData = json['inProgressList'] as List<dynamic>;
     final toDoData = json['toDoList'] as List<dynamic>;
+    final skillData = json['skillset'] as List<dynamic>;
 
     return StoreObject(
         inProgressList:
             inProgressData.map((item) => OngoingItem.fromJson(item)).toList(),
-        toDoList: toDoData.map((item) => item.toString()).toList());
+        toDoList: toDoData.map((item) => item.toString()).toList(),
+        skillset: skillData.map((item) => SkillItem.fromJson(item)).toList());
   }
 
-  Map<String, dynamic> toJson() =>
-      {'inProgressList': inProgressList, 'toDoList': toDoList};
+  Map<String, dynamic> toJson() => {
+        'inProgressList': inProgressList,
+        'toDoList': toDoList,
+        'skillset': skillset
+      };
 }
 
 class LocalStorage extends ChangeNotifier {
@@ -66,6 +87,10 @@ class LocalStorage extends ChangeNotifier {
 
   List<String> get toDoList {
     return store.toDoList;
+  }
+
+  List<SkillItem> get skillset {
+    return store.skillset;
   }
 
   Future<String> get _localPath async {
@@ -119,15 +144,22 @@ class LocalStorage extends ChangeNotifier {
     writeStore(store);
   }
 
-  void addToDoItem(newItem) {
+  void addToDoItem(String newItem) {
     store.toDoList.add(newItem);
     notifyListeners();
 
     writeStore(store);
   }
 
-  void deleteToDoItem(item) {
+  void deleteToDoItem(String item) {
     store.toDoList.remove(item);
+    notifyListeners();
+
+    writeStore(store);
+  }
+
+  void updateSkillset(List<SkillItem> newValue) {
+    store.skillset = newValue;
     notifyListeners();
 
     writeStore(store);

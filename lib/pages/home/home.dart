@@ -1,4 +1,5 @@
 import 'package:dellery_app/pages/home/parkinglot.dart';
+import 'package:dellery_app/pages/home/skillset.dart';
 import 'package:flutter/material.dart';
 
 import 'package:dellery_app/components/card.dart';
@@ -29,7 +30,7 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.amberAccent[700],
+        backgroundColor: Colors.green[900],
         title: const Text("Title"),
       ),
       body: Container(
@@ -52,17 +53,24 @@ class _HomePageState extends State<HomePage> {
                             localStorage: localStorage,
                           ))),
                   Expanded(
-                      child: HomeCard(title: "Parking Lot", child: ParkingLotContent(
-                        toDoList: localStorage.toDoList,
-                        localStorage: localStorage,
-                      ))),
+                      child: HomeCard(
+                          title: "Parking Lot",
+                          child: ParkingLotContent(
+                            toDoList: localStorage.toDoList,
+                            localStorage: localStorage,
+                          ))),
                 ])),
             Expanded(
               flex: 2,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: const [
-                  Expanded(child: HomeCard(title: "Skillset", child: Text("")))
+                children: [
+                  Expanded(
+                      child: HomeCard(
+                          title: "Skillset",
+                          child: SkillsetContent(
+                              skillset: localStorage.skillset,
+                              localStorage: localStorage)))
                 ],
               ),
             ),
