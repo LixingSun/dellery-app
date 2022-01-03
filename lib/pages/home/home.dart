@@ -57,86 +57,134 @@ class _HomePageState extends State<HomePage> {
     final today = DateFormat('yMMMEd').format(DateTime.now());
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.green[900],
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(today),
-            Row(
-              children: [
-                Text('${temperature.round()}°C, $weather'),
-                Padding(
-                  padding: const EdgeInsets.only(left: 6),
-                  child: CircleAvatar(
-                    radius: 20,
-                    backgroundColor: Colors.green[300],
-                    backgroundImage:
-                        AssetImage('assets/weather/$weatherIcon@2x.png'),
-                  ),
-                )
-              ],
-            )
-          ],
-        ),
-      ),
-      body: Container(
-          constraints: const BoxConstraints.expand(),
-          decoration: const BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage("assets/bg.jpg"), fit: BoxFit.cover)),
-          child:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Expanded(
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                  Expanded(
-                      child: HomeCard(
-                          title: "进展/Highway",
-                          child: HighwayContent(
-                            ongoingList: localStorage.inProgressList,
-                            localStorage: localStorage,
-                          ))),
-                  Expanded(
-                      child: HomeCard(
-                          title: "待学/Parking Lot",
-                          child: ParkingLotContent(
-                            toDoList: localStorage.toDoList,
-                            localStorage: localStorage,
-                          ))),
-                ])),
-            Expanded(
-              flex: 2,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+        appBar: AppBar(
+          backgroundColor: Colors.green[900],
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(today),
+              Row(
                 children: [
-                  Expanded(
-                      child: HomeCard(
-                          title: "技能/Skillset",
-                          child: SkillsetContent(
-                              skillset: localStorage.skillset,
-                              localStorage: localStorage)))
+                  Text('${temperature.round()}°C, $weather'),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 6),
+                    child: CircleAvatar(
+                      radius: 20,
+                      backgroundColor: Colors.green[300],
+                      backgroundImage:
+                          AssetImage('assets/weather/$weatherIcon@2x.png'),
+                    ),
+                  )
                 ],
-              ),
-            ),
-            Expanded(
-                child: Column(
+              )
+            ],
+          ),
+        ),
+        body: Container(
+            constraints: const BoxConstraints.expand(),
+            decoration: const BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage("assets/bg.jpg"), fit: BoxFit.cover)),
+            child: LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+              bool useVerticalLayout = MediaQuery.of(context).size.width < 1024;
+              if (useVerticalLayout) {
+                return SingleChildScrollView(
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                      SizedBox(
+                          height: 400,
+                          child: HomeCard(
+                              title: "进展/Highway",
+                              child: HighwayContent(
+                                ongoingList: localStorage.inProgressList,
+                                localStorage: localStorage,
+                              ))),
+                      SizedBox(
+                          height: 400,
+                          child: HomeCard(
+                              title: "待学/Parking Lot",
+                              child: ParkingLotContent(
+                                toDoList: localStorage.toDoList,
+                                localStorage: localStorage,
+                              ))),
+                      SizedBox(
+                          height: 400,
+                          child: HomeCard(
+                              title: "技能/Skillset",
+                              child: SkillsetContent(
+                                  skillset: localStorage.skillset,
+                                  localStorage: localStorage))),
+                      SizedBox(
+                          height: 400,
+                          child: HomeCard(
+                              title: "灵感/Radio",
+                              child: RadioContent(
+                                ideaList: localStorage.ideaList,
+                                localStorage: localStorage,
+                              ))),
+                      const SizedBox(
+                          height: 400,
+                          child:
+                              HomeCard(title: "工具/Rest Area", child: Text("")))
+                    ]));
+              } else {
+                return Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                  Expanded(
-                      child: HomeCard(
-                          title: "灵感/Radio",
-                          child: RadioContent(
-                            ideaList: localStorage.ideaList,
-                            localStorage: localStorage,
-                          ))),
-                  const Expanded(
-                      child: HomeCard(title: "工具/Rest Area", child: Text(""))),
-                ])),
-          ])),
-    );
+                      Expanded(
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                            Expanded(
+                                child: HomeCard(
+                                    title: "进展/Highway",
+                                    child: HighwayContent(
+                                      ongoingList: localStorage.inProgressList,
+                                      localStorage: localStorage,
+                                    ))),
+                            Expanded(
+                                child: HomeCard(
+                                    title: "待学/Parking Lot",
+                                    child: ParkingLotContent(
+                                      toDoList: localStorage.toDoList,
+                                      localStorage: localStorage,
+                                    ))),
+                          ])),
+                      Expanded(
+                        flex: 2,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Expanded(
+                                child: HomeCard(
+                                    title: "技能/Skillset",
+                                    child: SkillsetContent(
+                                        skillset: localStorage.skillset,
+                                        localStorage: localStorage)))
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                            Expanded(
+                                child: HomeCard(
+                                    title: "灵感/Radio",
+                                    child: RadioContent(
+                                      ideaList: localStorage.ideaList,
+                                      localStorage: localStorage,
+                                    ))),
+                            const Expanded(
+                                child: HomeCard(
+                                    title: "工具/Rest Area", child: Text(""))),
+                          ])),
+                    ]);
+              }
+            })));
   }
 }
