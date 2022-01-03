@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -45,7 +44,6 @@ class _HomePageState extends State<HomePage> {
         'http://api.openweathermap.org/data/2.5/weather?q=Chengdu,cn&APPID=${dotenv.env['WEATHER_API_APP_ID']}&units=metric');
     var response = await http.get(url);
 
-    stderr.writeln('Response body: ${response.body}');
     setState(() {
       final weatherData = json.decode(response.body);
       temperature = weatherData['main']['temp'];

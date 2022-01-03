@@ -116,8 +116,6 @@ class LocalStorage extends ChangeNotifier {
   }
 
   void readStore() async {
-    stderr.writeln("read");
-
     try {
       final file = await _localFile;
 
@@ -199,8 +197,6 @@ class LocalStorage extends ChangeNotifier {
   }
 
   Future<File> writeStore(StoreObject newStore) async {
-    stderr.writeln("write");
-
     final file = await _localFile;
 
     // Write the file
