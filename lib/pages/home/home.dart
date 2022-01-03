@@ -1,5 +1,7 @@
-import 'package:dellery_app/pages/home/radio.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+import 'package:dellery_app/pages/home/radio.dart';
 import 'package:dellery_app/pages/home/parkinglot.dart';
 import 'package:dellery_app/pages/home/skillset.dart';
 import 'package:dellery_app/components/card.dart';
@@ -27,11 +29,12 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final localStorage = widget.localStorage;
+    final today = DateFormat('yMMMEd').format(DateTime.now());
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green[900],
-        title: const Text("Title"),
+        title: Text(today),
       ),
       body: Container(
           constraints: const BoxConstraints.expand(),
