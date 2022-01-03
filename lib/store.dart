@@ -53,28 +53,34 @@ class StoreObject {
   List<OngoingItem> inProgressList;
   List<String> toDoList;
   List<SkillItem> skillset;
+  List<String> ideaList;
 
   StoreObject(
       {this.inProgressList = const <OngoingItem>[],
       this.toDoList = const <String>[],
-      this.skillset = const <SkillItem>[]});
+      this.skillset = const <SkillItem>[],
+      this.ideaList = const <String>[]});
 
   factory StoreObject.fromJson(Map<String, dynamic> json) {
     final inProgressData = json['inProgressList'] as List<dynamic>;
     final toDoData = json['toDoList'] as List<dynamic>;
     final skillData = json['skillset'] as List<dynamic>;
+    final ideaListData = json['ideaList'] as List<dynamic>;
 
     return StoreObject(
-        inProgressList:
-            inProgressData.map((item) => OngoingItem.fromJson(item)).toList(),
-        toDoList: toDoData.map((item) => item.toString()).toList(),
-        skillset: skillData.map((item) => SkillItem.fromJson(item)).toList());
+      inProgressList:
+          inProgressData.map((item) => OngoingItem.fromJson(item)).toList(),
+      toDoList: toDoData.map((item) => item.toString()).toList(),
+      skillset: skillData.map((item) => SkillItem.fromJson(item)).toList(),
+      ideaList: ideaListData.map((item) => item.toString()).toList(),
+    );
   }
 
   Map<String, dynamic> toJson() => {
         'inProgressList': inProgressList,
         'toDoList': toDoList,
-        'skillset': skillset
+        'skillset': skillset,
+        'ideaList': ideaList
       };
 }
 
@@ -91,6 +97,10 @@ class LocalStorage extends ChangeNotifier {
 
   List<SkillItem> get skillset {
     return store.skillset;
+  }
+
+  List<String> get ideaList {
+    return store.ideaList;
   }
 
   Future<String> get _localPath async {
@@ -167,6 +177,20 @@ class LocalStorage extends ChangeNotifier {
 
   void addSkillset(SkillItem newValue) {
     store.skillset.add(newValue);
+    notifyListeners();
+
+    writeStore(store);
+  }
+
+  void addIdeaItem(String newItem) {
+    store.ideaList.add(newItem);
+    notifyListeners();
+
+    writeStore(store);
+  }
+
+  void deleteIdeaItem(String item) {
+    store.ideaList.remove(item);
     notifyListeners();
 
     writeStore(store);
