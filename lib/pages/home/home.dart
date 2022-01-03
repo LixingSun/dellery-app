@@ -1,3 +1,4 @@
+import 'package:dellery_app/pages/home/radio.dart';
 import 'package:flutter/material.dart';
 import 'package:dellery_app/pages/home/parkinglot.dart';
 import 'package:dellery_app/pages/home/skillset.dart';
@@ -77,9 +78,15 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: const [
-                  Expanded(child: HomeCard(title: "灵感/Radio", child: Text(""))),
+                    children: [
                   Expanded(
+                      child: HomeCard(
+                          title: "灵感/Radio",
+                          child: RadioContent(
+                            ideaList: localStorage.ideaList,
+                            localStorage: localStorage,
+                          ))),
+                  const Expanded(
                       child: HomeCard(title: "工具/Rest Area", child: Text(""))),
                 ])),
           ])),
