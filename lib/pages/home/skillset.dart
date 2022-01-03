@@ -23,13 +23,11 @@ class _SkillsetContentState extends State<SkillsetContent> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.skillset.isEmpty) return Container();
-
     final features = widget.skillset.map((item) => item.title).toList();
     final data = widget.skillset.map((item) => item.rating).toList();
 
     return Column(children: [
-      Expanded(
+      widget.skillset.isEmpty ? Container() : Expanded(
           child:
               RadarChart.dark(ticks: ticks, features: features, data: [data])),
       Padding(

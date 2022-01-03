@@ -56,10 +56,10 @@ class StoreObject {
   List<String> ideaList;
 
   StoreObject(
-      {this.inProgressList = const <OngoingItem>[],
-      this.toDoList = const <String>[],
-      this.skillset = const <SkillItem>[],
-      this.ideaList = const <String>[]});
+      {required this.inProgressList,
+      required this.toDoList,
+      required this.skillset,
+      required this.ideaList});
 
   factory StoreObject.fromJson(Map<String, dynamic> json) {
     final inProgressData = json['inProgressList'] as List<dynamic>;
@@ -85,7 +85,8 @@ class StoreObject {
 }
 
 class LocalStorage extends ChangeNotifier {
-  StoreObject store = StoreObject();
+  StoreObject store =
+      StoreObject(inProgressList: [], toDoList: [], skillset: [], ideaList: []);
 
   List<OngoingItem> get inProgressList {
     return store.inProgressList;
@@ -127,7 +128,8 @@ class LocalStorage extends ChangeNotifier {
     } catch (e) {
       stderr.writeln(e);
       // If encountering an error, return 0
-      store = StoreObject();
+      store = StoreObject(
+          inProgressList: [], toDoList: [], skillset: [], ideaList: []);
     } finally {
       notifyListeners();
     }
