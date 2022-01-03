@@ -1,6 +1,8 @@
-import 'package:dellery_app/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_radar_chart/flutter_radar_chart.dart';
+
+import 'package:dellery_app/components/button.dart';
+import 'package:dellery_app/constants/colors.dart';
 
 import '../../store.dart';
 
@@ -90,17 +92,19 @@ class _SkillsetContentState extends State<SkillsetContent> {
                               ],
                             ),
                             actions: [
-                              TextButton(
-                                  child: const Text("SAVE"),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    widget.localStorage.addSkillset(newSkill);
-                                  }),
-                              TextButton(
+                              CustomTextButton(
+                                child: const Text("SAVE"),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  widget.localStorage.addSkillset(newSkill);
+                                },
+                                isPrimary: true,
+                              ),
+                              CustomTextButton(
                                   child: const Text("CANCEL"),
                                   onPressed: () {
                                     Navigator.pop(context);
-                                  })
+                                  }),
                             ],
                           );
                         });
@@ -169,14 +173,15 @@ class _SkillsetContentState extends State<SkillsetContent> {
                             );
                           }).toList())),
                           actions: [
-                            TextButton(
-                                child: const Text("SAVE"),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                  widget.localStorage
-                                      .updateSkillset(tempSkills);
-                                }),
-                            TextButton(
+                            CustomTextButton(
+                              child: const Text("SAVE"),
+                              onPressed: () {
+                                Navigator.pop(context);
+                                widget.localStorage.updateSkillset(tempSkills);
+                              },
+                              isPrimary: true,
+                            ),
+                            CustomTextButton(
                                 child: const Text("CANCEL"),
                                 onPressed: () {
                                   Navigator.pop(context);

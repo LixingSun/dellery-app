@@ -1,6 +1,6 @@
-import 'package:dellery_app/constants/colors.dart';
+import 'package:dellery_app/components/button.dart';
 import 'package:flutter/material.dart';
-
+import 'package:dellery_app/constants/colors.dart';
 import '../../store.dart';
 
 class ParkingLotContent extends StatefulWidget {
@@ -35,16 +35,18 @@ class _ParkingLotContentState extends State<ParkingLotContent> {
                 context: context,
                 builder: (context) {
                   return AlertDialog(
-                    title: const Text("Create"),
+                    title: const Text("Delete"),
                     content: Text('Confirm to delete the $toDoItem'),
                     actions: [
-                      TextButton(
-                          child: const Text("SAVE"),
-                          onPressed: () {
-                            Navigator.pop(context);
-                            widget.localStorage.deleteToDoItem(toDoItem);
-                          }),
-                      TextButton(
+                      CustomTextButton(
+                        child: const Text("DELETE"),
+                        onPressed: () {
+                          Navigator.pop(context);
+                          widget.localStorage.deleteToDoItem(toDoItem);
+                        },
+                        isPrimary: true,
+                      ),
+                      CustomTextButton(
                           child: const Text("CANCEL"),
                           onPressed: () {
                             Navigator.pop(context);
@@ -77,13 +79,15 @@ class _ParkingLotContentState extends State<ParkingLotContent> {
                     ),
                   ),
                   actions: [
-                    TextButton(
-                        child: const Text("SAVE"),
-                        onPressed: () {
-                          Navigator.pop(context);
-                          widget.localStorage.addToDoItem(titleController.text);
-                        }),
-                    TextButton(
+                    CustomTextButton(
+                      child: const Text("SAVE"),
+                      onPressed: () {
+                        Navigator.pop(context);
+                        widget.localStorage.addToDoItem(titleController.text);
+                      },
+                      isPrimary: true,
+                    ),
+                    CustomTextButton(
                         child: const Text("CANCEL"),
                         onPressed: () {
                           Navigator.pop(context);

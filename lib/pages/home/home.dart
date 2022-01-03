@@ -1,7 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:dellery_app/pages/home/parkinglot.dart';
 import 'package:dellery_app/pages/home/skillset.dart';
-import 'package:flutter/material.dart';
-
 import 'package:dellery_app/components/card.dart';
 import './highway.dart';
 
@@ -54,7 +53,7 @@ class _HomePageState extends State<HomePage> {
                           ))),
                   Expanded(
                       child: HomeCard(
-                          title: "待办/Parking Lot",
+                          title: "待学/Parking Lot",
                           child: ParkingLotContent(
                             toDoList: localStorage.toDoList,
                             localStorage: localStorage,
@@ -79,7 +78,7 @@ class _HomePageState extends State<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: const [
-                  Expanded(child: HomeCard(title: "潮流/Radio", child: Text(""))),
+                  Expanded(child: HomeCard(title: "灵感/Radio", child: Text(""))),
                   Expanded(
                       child: HomeCard(title: "工具/Rest Area", child: Text(""))),
                 ])),

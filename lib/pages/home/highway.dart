@@ -1,6 +1,8 @@
+import 'package:flutter/material.dart';
+
+import 'package:dellery_app/components/button.dart';
 import 'package:dellery_app/constants/colors.dart';
 import 'package:enum_to_string/enum_to_string.dart';
-import 'package:flutter/material.dart';
 import 'package:dellery_app/components/progress_bar.dart';
 
 import '../../store.dart';
@@ -27,7 +29,8 @@ class _HighwayContentState extends State<HighwayContent> {
   Widget _buildBody() {
     final ongoingList = widget.ongoingList;
 
-    return Column(mainAxisSize: MainAxisSize.min, children: [
+    return SingleChildScrollView(
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
       ListView.builder(
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
@@ -104,23 +107,24 @@ class _HighwayContentState extends State<HighwayContent> {
                           ],
                         ),
                         actions: [
-                          TextButton(
-                              child: const Text("SAVE"),
-                              onPressed: () {
-                                Navigator.pop(context);
-                                final newItem = OngoingItem(
-                                    title: titleController.text,
-                                    percent:
-                                        double.parse(percentController.text),
-                                    type: typeController);
-                                widget.localStorage
-                                    .updateInProgressItem(index, newItem);
-                              }),
-                          TextButton(
+                          CustomTextButton(
+                            child: const Text("SAVE"),
+                            onPressed: () {
+                              Navigator.pop(context);
+                              final newItem = OngoingItem(
+                                  title: titleController.text,
+                                  percent: double.parse(percentController.text),
+                                  type: typeController);
+                              widget.localStorage
+                                  .updateInProgressItem(index, newItem);
+                            },
+                            isPrimary: true,
+                          ),
+                          CustomTextButton(
                               child: const Text("CANCEL"),
                               onPressed: () {
                                 Navigator.pop(context);
-                              }),
+                              })
                         ],
                       );
                     });
@@ -134,18 +138,20 @@ class _HighwayContentState extends State<HighwayContent> {
                         content: Text(
                             'Confirm to delete the ${index < ongoingList.length ? ongoingList[index].title : ""}'),
                         actions: [
-                          TextButton(
-                              child: const Text("DELETE"),
-                              onPressed: () {
-                                Navigator.pop(context);
-                                widget.localStorage
-                                    .deleteInProgressItem(ongoingList[index]);
-                              }),
-                          TextButton(
+                          CustomTextButton(
+                            child: const Text("DELETE"),
+                            onPressed: () {
+                              Navigator.pop(context);
+                              widget.localStorage
+                                  .deleteInProgressItem(ongoingList[index]);
+                            },
+                            isPrimary: true,
+                          ),
+                          CustomTextButton(
                               child: const Text("CANCEL"),
                               onPressed: () {
                                 Navigator.pop(context);
-                              })
+                              }),
                         ],
                       );
                     });
@@ -226,28 +232,30 @@ class _HighwayContentState extends State<HighwayContent> {
                       ],
                     ),
                     actions: [
-                      TextButton(
-                          child: const Text("SAVE"),
-                          onPressed: () {
-                            Navigator.pop(context);
-                            final newItem = OngoingItem(
-                                title: titleController.text,
-                                percent: double.parse(percentController.text),
-                                type: typeController);
-                            widget.localStorage.addInProgressItem(newItem);
-                          }),
-                      TextButton(
+                      CustomTextButton(
+                        child: const Text("SAVE"),
+                        onPressed: () {
+                          Navigator.pop(context);
+                          final newItem = OngoingItem(
+                              title: titleController.text,
+                              percent: double.parse(percentController.text),
+                              type: typeController);
+                          widget.localStorage.addInProgressItem(newItem);
+                        },
+                        isPrimary: true,
+                      ),
+                      CustomTextButton(
                           child: const Text("CANCEL"),
                           onPressed: () {
                             Navigator.pop(context);
-                          }),
+                          })
                     ],
                   );
                 });
           },
         ),
       )
-    ]);
+    ]));
   }
 
   @override
