@@ -12,7 +12,7 @@ class ProgressBar extends StatelessWidget {
   }) : super(key: key);
 
   final String title;
-  final double percent;
+  final int percent;
   final IconData? icon;
   final Function onEdit;
   final Function onDelete;
@@ -33,7 +33,7 @@ class ProgressBar extends StatelessWidget {
               lineHeight: 40.0,
               progressColor: Colors.yellow.shade800,
               backgroundColor: Colors.grey[800],
-              percent: percent,
+              percent: percent / 100,
               leading: Icon(
                 icon,
                 size: 20,

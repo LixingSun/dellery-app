@@ -16,7 +16,7 @@ Map<OngoingTypes, IconData> typeMap = {
 
 class OngoingItem {
   String title;
-  double percent;
+  int percent;
   OngoingTypes type;
 
   OngoingItem({required this.title, required this.percent, required this.type});
@@ -27,7 +27,7 @@ class OngoingItem {
 
     return OngoingItem(
         title: json['title'] as String,
-        percent: json['percent'] as double,
+        percent: json['percent'] as int,
         type: typeValue ?? OngoingTypes.book);
   }
 
