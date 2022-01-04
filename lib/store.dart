@@ -182,6 +182,13 @@ class LocalStorage extends ChangeNotifier {
     writeStore(store);
   }
 
+  void removeSkillset(String title) {
+    store.skillset.removeWhere((element) => element.title == title);
+    notifyListeners();
+
+    writeStore(store);
+  }
+
   void addIdeaItem(String newItem) {
     store.ideaList.add(newItem);
     notifyListeners();
