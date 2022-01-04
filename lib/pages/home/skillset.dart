@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_radar_chart/flutter_radar_chart.dart';
@@ -23,6 +25,7 @@ class _SkillsetContentState extends State<SkillsetContent> {
   final ticks = [1, 2, 3, 4, 5];
   final _editFormKey = GlobalKey<FormState>();
   final _addFormKey = GlobalKey<FormState>();
+  var tempTargetTitle = '';
 
   String? titleValidator(value) {
     if (value.isEmpty) return "Cannot be empty";
@@ -140,104 +143,173 @@ class _SkillsetContentState extends State<SkillsetContent> {
                         });
                   }),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: IconButton(
-                icon: Icon(
-                  Icons.edit,
-                  size: 24,
-                  color: toolColor,
-                ),
-                iconSize: 24,
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        List<SkillItem> tempSkills = List.from(widget.skillset);
+            widget.skillset.isEmpty
+                ? Container()
+                : Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.edit,
+                        size: 24,
+                        color: toolColor,
+                      ),
+                      iconSize: 24,
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              List<SkillItem> tempSkills =
+                                  List.from(widget.skillset);
 
-                        return AlertDialog(
-                          title: const Text("Edit Skillset"),
-                          content: Form(
-                            key: _editFormKey,
-                            child: SingleChildScrollView(
-                                child: Column(
-                                    children: List.generate(tempSkills.length,
-                                        (index) {
-                              return Row(
-                                children: [
-                                  Container(
-                                    width: 200,
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8, vertical: 4),
-                                    child: TextFormField(
-                                      initialValue: tempSkills[index].title,
-                                      validator: titleValidator,
-                                      autovalidateMode:
-                                          AutovalidateMode.onUserInteraction,
-                                      decoration: const InputDecoration(
-                                        labelText: 'Title',
-                                        hintText: '',
-                                      ),
-                                      onChanged: (value) {
-                                        setState(() {
-                                          tempSkills[index].title = value;
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                  Container(
-                                    width: 150,
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8, vertical: 4),
-                                    child: TextFormField(
-                                      keyboardType: TextInputType.number,
-                                      inputFormatters: [
-                                        FilteringTextInputFormatter.digitsOnly
+                              return AlertDialog(
+                                title: const Text("Edit Skillset"),
+                                content: Form(
+                                  key: _editFormKey,
+                                  child: SingleChildScrollView(
+                                      child: Column(
+                                          children: List.generate(
+                                              tempSkills.length, (index) {
+                                    return Row(
+                                      children: [
+                                        Container(
+                                          width: 200,
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8, vertical: 4),
+                                          child: TextFormField(
+                                            initialValue:
+                                                tempSkills[index].title,
+                                            validator: titleValidator,
+                                            autovalidateMode: AutovalidateMode
+                                                .onUserInteraction,
+                                            decoration: const InputDecoration(
+                                              labelText: 'Title',
+                                              hintText: '',
+                                            ),
+                                            onChanged: (value) {
+                                              setState(() {
+                                                tempSkills[index].title = value;
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                        Container(
+                                          width: 150,
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8, vertical: 4),
+                                          child: TextFormField(
+                                            keyboardType: TextInputType.number,
+                                            inputFormatters: [
+                                              FilteringTextInputFormatter
+                                                  .digitsOnly
+                                            ],
+                                            initialValue: tempSkills[index]
+                                                .rating
+                                                .toString(),
+                                            validator: ratingValidator,
+                                            autovalidateMode: AutovalidateMode
+                                                .onUserInteraction,
+                                            decoration: const InputDecoration(
+                                              labelText: 'Rating',
+                                              hintText: 'Enter the rating',
+                                            ),
+                                            onChanged: (value) {
+                                              setState(() {
+                                                tempSkills[index].rating =
+                                                    int.parse(value.isEmpty
+                                                        ? '0'
+                                                        : value);
+                                              });
+                                            },
+                                          ),
+                                        )
                                       ],
-                                      initialValue:
-                                          tempSkills[index].rating.toString(),
-                                      validator: ratingValidator,
-                                      autovalidateMode:
-                                          AutovalidateMode.onUserInteraction,
-                                      decoration: const InputDecoration(
-                                        labelText: 'Rating',
-                                        hintText: 'Enter the rating',
-                                      ),
-                                      onChanged: (value) {
-                                        setState(() {
-                                          tempSkills[index].rating = int.parse(
-                                              value.isEmpty ? '0' : value);
-                                        });
-                                      },
-                                    ),
-                                  )
+                                    );
+                                  }).toList())),
+                                ),
+                                actions: [
+                                  CustomTextButton(
+                                    child: const Text("SAVE"),
+                                    onPressed: () {
+                                      if (_editFormKey.currentState!
+                                          .validate()) {
+                                        Navigator.pop(context);
+                                        widget.localStorage
+                                            .updateSkillset(tempSkills);
+                                      }
+                                    },
+                                    isPrimary: true,
+                                  ),
+                                  CustomTextButton(
+                                      child: const Text("CANCEL"),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      })
                                 ],
                               );
-                            }).toList())),
-                          ),
-                          actions: [
-                            CustomTextButton(
-                              child: const Text("SAVE"),
-                              onPressed: () {
-                                if (_editFormKey.currentState!.validate()) {
-                                  Navigator.pop(context);
-                                  widget.localStorage
-                                      .updateSkillset(tempSkills);
-                                }
-                              },
-                              isPrimary: true,
-                            ),
-                            CustomTextButton(
-                                child: const Text("CANCEL"),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                })
-                          ],
-                        );
-                      });
-                },
-              ),
-            )
+                            });
+                      },
+                    ),
+                  ),
+            widget.skillset.isEmpty
+                ? Container()
+                : Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.delete,
+                        size: 24,
+                        color: toolColor,
+                      ),
+                      iconSize: 24,
+                      onPressed: () {
+                        var skillsetTitles =
+                            widget.skillset.map((item) => item.title).toList();
+                        setState(() {
+                          tempTargetTitle = skillsetTitles[0];
+                        });
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text("Delete Skillset"),
+                                content: DropdownButtonFormField(
+                                  value: tempTargetTitle,
+                                  items: skillsetTitles
+                                      .map((value) => DropdownMenuItem(
+                                          child: Text(value), value: value))
+                                      .toList(),
+                                  decoration: const InputDecoration(
+                                    labelText: 'Skill',
+                                    border: OutlineInputBorder(),
+                                    hintText: 'Select the skill to remove',
+                                  ),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      tempTargetTitle = value.toString();
+                                    });
+                                  },
+                                ),
+                                actions: [
+                                  CustomTextButton(
+                                    child: const Text("DELETE"),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      widget.localStorage
+                                          .removeSkillset(tempTargetTitle);
+                                    },
+                                    isPrimary: true,
+                                  ),
+                                  CustomTextButton(
+                                      child: const Text("CANCEL"),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      })
+                                ],
+                              );
+                            });
+                      },
+                    ),
+                  )
           ]))
     ]);
   }
