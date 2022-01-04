@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -6,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
+import 'package:file_picker/file_picker.dart';
 
 import 'package:dellery_app/pages/home/radio.dart';
 import 'package:dellery_app/pages/home/parkinglot.dart';
@@ -29,6 +31,8 @@ class _HomePageState extends State<HomePage> {
   String weather = '';
   String weatherIcon = '01d';
   ScreenshotController screenshotController = ScreenshotController();
+  File? customBg;
+  String systemDirectory = '';
 
   @override
   void initState() {
@@ -36,6 +40,21 @@ class _HomePageState extends State<HomePage> {
 
     widget.localStorage.readStore();
     getWeather();
+    getDirectoryAndCustomBg();
+  }
+
+  void getDirectoryAndCustomBg() async {
+    var directory = (await getApplicationDocumentsDirectory()).path;
+
+    setState(() {
+      systemDirectory = directory;
+    });
+
+    if ((await File('$directory/custom_bg.png').exists())) {
+      setState(() {
+        customBg = File('$directory/custom_bg.png');
+      });
+    }
   }
 
   void getWeather() async {
@@ -50,6 +69,28 @@ class _HomePageState extends State<HomePage> {
       weather = weatherData['weather'][0]['main'];
       weatherIcon = weatherData['weather'][0]['icon'];
     });
+  }
+
+  void exportScreenshot() async {
+    // final directory = (await getApplicationDocumentsDirectory()).path;
+    String fileName = DateTime.now().microsecondsSinceEpoch.toString();
+
+    screenshotController.captureAndSave(systemDirectory,
+        fileName: 'dellery_screenshot_$fileName.png');
+  }
+
+  void changeBackground() async {
+    // final directory = (await getApplicationDocumentsDirectory()).path;
+    FilePickerResult? result = await FilePicker.platform
+        .pickFiles(allowedExtensions: ['png', 'jpg', 'jpeg', 'gif', 'bmp']);
+
+    if (result != null) {
+      setState(() {
+        final bgFile = File(result.files.single.path!);
+        customBg = bgFile;
+        bgFile.copy('$systemDirectory/custom_bg.png');
+      });
+    }
   }
 
   @override
@@ -83,17 +124,16 @@ class _HomePageState extends State<HomePage> {
               Row(
                 children: [
                   TextButton(
-                      onPressed: () async {
-                        final directory =
-                            (await getApplicationDocumentsDirectory()).path;
-                        String fileName =
-                            DateTime.now().microsecondsSinceEpoch.toString();
-
-                        screenshotController.captureAndSave(directory,
-                            fileName: 'dellery_screenshot_$fileName.png');
-                      },
+                      onPressed: exportScreenshot,
                       child: const Icon(
                         Icons.screenshot_outlined,
+                        size: 32,
+                        color: Colors.white,
+                      )),
+                  TextButton(
+                      onPressed: changeBackground,
+                      child: const Icon(
+                        Icons.camera,
                         size: 32,
                         color: Colors.white,
                       ))
@@ -106,9 +146,13 @@ class _HomePageState extends State<HomePage> {
             controller: screenshotController,
             child: Container(
                 constraints: const BoxConstraints.expand(),
-                decoration: const BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage("assets/bg.jpg"), fit: BoxFit.cover)),
+                decoration: BoxDecoration(
+                    image: customBg == null
+                        ? const DecorationImage(
+                            image: AssetImage("assets/bg.jpg"),
+                            fit: BoxFit.cover)
+                        : DecorationImage(
+                            image: FileImage(customBg!), fit: BoxFit.cover)),
                 child: LayoutBuilder(builder:
                     (BuildContext context, BoxConstraints constraints) {
                   bool useVerticalLayout =
