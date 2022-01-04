@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:dellery_app/components/button.dart';
 import 'package:dellery_app/constants/colors.dart';
@@ -68,6 +69,10 @@ class _HighwayContentState extends State<HighwayContent> {
                               padding: const EdgeInsets.all(8),
                               child: TextFormField(
                                 controller: percentController,
+                                keyboardType: TextInputType.number,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.digitsOnly
+                                ],
                                 decoration: const InputDecoration(
                                   labelText: 'Percent',
                                   border: OutlineInputBorder(),
@@ -113,7 +118,7 @@ class _HighwayContentState extends State<HighwayContent> {
                               Navigator.pop(context);
                               final newItem = OngoingItem(
                                   title: titleController.text,
-                                  percent: double.parse(percentController.text),
+                                  percent: int.parse(percentController.text),
                                   type: typeController);
                               widget.localStorage
                                   .updateInProgressItem(index, newItem);
@@ -193,6 +198,10 @@ class _HighwayContentState extends State<HighwayContent> {
                           padding: const EdgeInsets.all(8),
                           child: TextFormField(
                             controller: percentController,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
                             decoration: const InputDecoration(
                               labelText: 'Percent',
                               border: OutlineInputBorder(),
@@ -238,7 +247,7 @@ class _HighwayContentState extends State<HighwayContent> {
                           Navigator.pop(context);
                           final newItem = OngoingItem(
                               title: titleController.text,
-                              percent: double.parse(percentController.text),
+                              percent: int.parse(percentController.text),
                               type: typeController);
                           widget.localStorage.addInProgressItem(newItem);
                         },

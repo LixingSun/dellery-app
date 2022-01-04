@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_radar_chart/flutter_radar_chart.dart';
 
 import 'package:dellery_app/components/button.dart';
@@ -153,6 +154,8 @@ class _SkillsetContentState extends State<SkillsetContent> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 8, vertical: 4),
                                   child: TextFormField(
+                                    keyboardType: TextInputType.number,
+                                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                                     initialValue:
                                         tempSkills[index].rating.toString(),
                                     decoration: const InputDecoration(
