@@ -27,6 +27,25 @@ class _HighwayContentState extends State<HighwayContent> {
   final percentController = TextEditingController();
   OngoingTypes typeController = defaultType;
 
+  final _editFormKey = GlobalKey<FormState>();
+  final _addFormKey = GlobalKey<FormState>();
+
+  String? titleValidator(value) {
+    if (value.isEmpty) return "Cannot be empty";
+
+    return null;
+  }
+
+  String? percentValidator(value) {
+    if (value.isEmpty) return "Cannot be empty";
+
+    final number = int.parse(value);
+    if (number < 0 || number > 100) {
+      return "Valid range is from 0 to 100";
+    }
+    return null;
+  }
+
   Widget _buildBody() {
     final ongoingList = widget.ongoingList;
 
@@ -51,77 +70,86 @@ class _HighwayContentState extends State<HighwayContent> {
                     builder: (context) {
                       return AlertDialog(
                         title: const Text("Edit"),
-                        content: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: TextFormField(
-                                controller: titleController,
-                                decoration: const InputDecoration(
-                                  labelText: 'Title',
-                                  border: OutlineInputBorder(),
-                                  hintText: 'Enter the title',
+                        content: Form(
+                          key: _editFormKey,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: TextFormField(
+                                  controller: titleController,
+                                  validator: titleValidator,
+                                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Title',
+                                    border: OutlineInputBorder(),
+                                    hintText: 'Enter the title',
+                                  ),
                                 ),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: TextFormField(
-                                controller: percentController,
-                                keyboardType: TextInputType.number,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.digitsOnly
-                                ],
-                                decoration: const InputDecoration(
-                                  labelText: 'Percent',
-                                  border: OutlineInputBorder(),
-                                  hintText: 'Enter the percent',
+                              Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: TextFormField(
+                                  controller: percentController,
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly
+                                  ],
+                                  validator: percentValidator,
+                                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Percent',
+                                    border: OutlineInputBorder(),
+                                    hintText: 'Enter the percent',
+                                  ),
                                 ),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: DropdownButtonFormField(
-                                value: typeController,
-                                items: OngoingTypes.values
-                                    .map((value) => DropdownMenuItem(
-                                        child: Text(
-                                          value
-                                              .toString()
-                                              .split('.')[1]
-                                              .toUpperCase(),
-                                        ),
-                                        value: value))
-                                    .toList(),
-                                decoration: const InputDecoration(
-                                  labelText: 'Type',
-                                  border: OutlineInputBorder(),
-                                  hintText: 'Select the type',
+                              Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: DropdownButtonFormField(
+                                  value: typeController,
+                                  items: OngoingTypes.values
+                                      .map((value) => DropdownMenuItem(
+                                          child: Text(
+                                            value
+                                                .toString()
+                                                .split('.')[1]
+                                                .toUpperCase(),
+                                          ),
+                                          value: value))
+                                      .toList(),
+                                  decoration: const InputDecoration(
+                                    labelText: 'Type',
+                                    border: OutlineInputBorder(),
+                                    hintText: 'Select the type',
+                                  ),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      typeController = EnumToString.fromString(
+                                              OngoingTypes.values,
+                                              value.toString().split('.')[1]) ??
+                                          defaultType;
+                                    });
+                                  },
                                 ),
-                                onChanged: (value) {
-                                  setState(() {
-                                    typeController = EnumToString.fromString(
-                                            OngoingTypes.values,
-                                            value.toString().split('.')[1]) ??
-                                        defaultType;
-                                  });
-                                },
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                         actions: [
                           CustomTextButton(
                             child: const Text("SAVE"),
                             onPressed: () {
-                              Navigator.pop(context);
-                              final newItem = OngoingItem(
-                                  title: titleController.text,
-                                  percent: int.parse(percentController.text),
-                                  type: typeController);
-                              widget.localStorage
-                                  .updateInProgressItem(index, newItem);
+                              if (_editFormKey.currentState!.validate()) {
+                                Navigator.pop(context);
+                                final newItem = OngoingItem(
+                                    title: titleController.text,
+                                    percent: int.parse(percentController.text),
+                                    type: typeController);
+                                widget.localStorage
+                                    .updateInProgressItem(index, newItem);
+                              }
                             },
                             isPrimary: true,
                           ),
@@ -180,76 +208,85 @@ class _HighwayContentState extends State<HighwayContent> {
                 builder: (context) {
                   return AlertDialog(
                     title: const Text("Add"),
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: TextFormField(
-                            controller: titleController,
-                            decoration: const InputDecoration(
-                              labelText: 'Title',
-                              border: OutlineInputBorder(),
-                              hintText: 'Enter the title',
+                    content: Form(
+                      key: _addFormKey,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: TextFormField(
+                              controller: titleController,
+                              validator: titleValidator,
+                              autovalidateMode: AutovalidateMode.onUserInteraction,
+                              decoration: const InputDecoration(
+                                labelText: 'Title',
+                                border: OutlineInputBorder(),
+                                hintText: 'Enter the title',
+                              ),
                             ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: TextFormField(
-                            controller: percentController,
-                            keyboardType: TextInputType.number,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly
-                            ],
-                            decoration: const InputDecoration(
-                              labelText: 'Percent',
-                              border: OutlineInputBorder(),
-                              hintText: 'Enter the percent',
+                          Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: TextFormField(
+                              controller: percentController,
+                              keyboardType: TextInputType.number,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
+                              validator: percentValidator,
+                              autovalidateMode: AutovalidateMode.onUserInteraction,
+                              decoration: const InputDecoration(
+                                labelText: 'Percent',
+                                border: OutlineInputBorder(),
+                                hintText: 'Enter the percent',
+                              ),
                             ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: DropdownButtonFormField(
-                            value: typeController,
-                            items: OngoingTypes.values
-                                .map((value) => DropdownMenuItem(
-                                    child: Text(
-                                      value
-                                          .toString()
-                                          .split('.')[1]
-                                          .toUpperCase(),
-                                    ),
-                                    value: value))
-                                .toList(),
-                            decoration: const InputDecoration(
-                              labelText: 'Type',
-                              border: OutlineInputBorder(),
-                              hintText: 'Select the type',
+                          Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: DropdownButtonFormField(
+                              value: typeController,
+                              items: OngoingTypes.values
+                                  .map((value) => DropdownMenuItem(
+                                      child: Text(
+                                        value
+                                            .toString()
+                                            .split('.')[1]
+                                            .toUpperCase(),
+                                      ),
+                                      value: value))
+                                  .toList(),
+                              decoration: const InputDecoration(
+                                labelText: 'Type',
+                                border: OutlineInputBorder(),
+                                hintText: 'Select the type',
+                              ),
+                              onChanged: (value) {
+                                setState(() {
+                                  typeController = EnumToString.fromString(
+                                          OngoingTypes.values,
+                                          value.toString().split('.')[1]) ??
+                                      defaultType;
+                                });
+                              },
                             ),
-                            onChanged: (value) {
-                              setState(() {
-                                typeController = EnumToString.fromString(
-                                        OngoingTypes.values,
-                                        value.toString().split('.')[1]) ??
-                                    defaultType;
-                              });
-                            },
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                     actions: [
                       CustomTextButton(
                         child: const Text("SAVE"),
                         onPressed: () {
-                          Navigator.pop(context);
-                          final newItem = OngoingItem(
-                              title: titleController.text,
-                              percent: int.parse(percentController.text),
-                              type: typeController);
-                          widget.localStorage.addInProgressItem(newItem);
+                          if (_addFormKey.currentState!.validate()) {
+                            Navigator.pop(context);
+                            final newItem = OngoingItem(
+                                title: titleController.text,
+                                percent: int.parse(percentController.text),
+                                type: typeController);
+                            widget.localStorage.addInProgressItem(newItem);
+                          }
                         },
                         isPrimary: true,
                       ),

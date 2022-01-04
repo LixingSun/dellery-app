@@ -17,6 +17,7 @@ class ParkingLotContent extends StatefulWidget {
 
 class _ParkingLotContentState extends State<ParkingLotContent> {
   final titleController = TextEditingController();
+  final _addFormKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
@@ -24,6 +25,12 @@ class _ParkingLotContentState extends State<ParkingLotContent> {
     // widget tree.
     titleController.dispose();
     super.dispose();
+  }
+
+  String? titleValidator(value) {
+    if (value.isEmpty) return "Cannot be empty";
+
+    return null;
   }
 
   @override
@@ -67,23 +74,29 @@ class _ParkingLotContentState extends State<ParkingLotContent> {
               builder: (context) {
                 return AlertDialog(
                   title: const Text("Create"),
-                  content: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: TextFormField(
-                      controller: titleController,
-                      decoration: const InputDecoration(
-                        labelText: 'Title',
-                        border: OutlineInputBorder(),
-                        hintText: 'Enter the title',
-                      ),
-                    ),
-                  ),
+                  content: Form(
+                      key: _addFormKey,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: TextFormField(
+                          controller: titleController,
+                          validator: titleValidator,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          decoration: const InputDecoration(
+                            labelText: 'Title',
+                            border: OutlineInputBorder(),
+                            hintText: 'Enter the title',
+                          ),
+                        ),
+                      )),
                   actions: [
                     CustomTextButton(
                       child: const Text("SAVE"),
                       onPressed: () {
-                        Navigator.pop(context);
-                        widget.localStorage.addToDoItem(titleController.text);
+                        if (_addFormKey.currentState!.validate()) {
+                          Navigator.pop(context);
+                          widget.localStorage.addToDoItem(titleController.text);
+                        }
                       },
                       isPrimary: true,
                     ),
