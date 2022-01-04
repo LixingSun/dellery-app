@@ -65,9 +65,9 @@ class _HomePageState extends State<HomePage> {
             children: [
               Row(
                 children: [
-                  Text('${temperature.round()}°C, $weather'),
+                  Text(today),
                   Padding(
-                    padding: const EdgeInsets.only(left: 6),
+                    padding: const EdgeInsets.only(left: 20),
                     child: CircleAvatar(
                       radius: 20,
                       backgroundColor: Colors.green[300],
@@ -75,9 +75,11 @@ class _HomePageState extends State<HomePage> {
                           AssetImage('assets/weather/$weatherIcon@2x.png'),
                     ),
                   ),
+                  Padding(
+                      padding: const EdgeInsets.only(left: 6),
+                      child: Text('$weather, ${temperature.round()}°C')),
                 ],
               ),
-              Text(today),
               Row(
                 children: [
                   TextButton(
@@ -90,7 +92,11 @@ class _HomePageState extends State<HomePage> {
                         screenshotController.captureAndSave(directory,
                             fileName: 'dellery_screenshot_$fileName.png');
                       },
-                      child: const Icon(Icons.screenshot))
+                      child: const Icon(
+                        Icons.screenshot_outlined,
+                        size: 32,
+                        color: Colors.white,
+                      ))
                 ],
               )
             ],
