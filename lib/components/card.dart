@@ -11,7 +11,6 @@ class HomeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
         margin: const EdgeInsets.all(12.0),
-        color: Colors.grey.shade900.withOpacity(0.7),
         child: Column(children: [
           Padding(
             padding: const EdgeInsets.only(bottom: 12),
