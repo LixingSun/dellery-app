@@ -20,11 +20,13 @@ class MyApp extends StatelessWidget {
       return MaterialApp(
         title: 'Dellery',
         theme: ThemeData(
-          fontFamily: "Play",
-          brightness: Brightness.dark,
-          primarySwatch: Colors.green,
-          scaffoldBackgroundColor: Colors.black,
-        ),
+            fontFamily: "Play",
+            brightness: Brightness.dark,
+            primarySwatch: Colors.green,
+            scaffoldBackgroundColor: Colors.black,
+            appBarTheme: AppBarTheme(
+              backgroundColor: Colors.green[900],
+            )),
         home: HomePage(localStorage: localStorage),
         debugShowCheckedModeBanner: false,
       );

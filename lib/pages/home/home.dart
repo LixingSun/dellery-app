@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dellery_app/pages/home/rest_area.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
@@ -100,7 +101,6 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.green[900],
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -256,7 +256,7 @@ class _HomePageState extends State<HomePage> {
                                 const Expanded(
                                     child: HomeCard(
                                         title: "工具/Rest Area",
-                                        child: Text(""))),
+                                        child: RestAreaContent())),
                               ])),
                         ]);
                   }
