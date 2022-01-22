@@ -253,10 +253,11 @@ class _HomePageState extends State<HomePage> {
                                           ideaList: localStorage.ideaList,
                                           localStorage: localStorage,
                                         ))),
-                                const Expanded(
+                                Expanded(
                                     child: HomeCard(
                                         title: "工具/Rest Area",
-                                        child: RestAreaContent())),
+                                        child: RestAreaContent(
+                                            localStorage: localStorage))),
                               ])),
                         ]);
                   }

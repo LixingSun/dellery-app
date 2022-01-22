@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 
 class CustomTextButton extends StatelessWidget {
   const CustomTextButton(
-      {Key? key, this.isPrimary = false, required this.child, required this.onPressed})
+      {Key? key,
+      this.isPrimary = false,
+      required this.child,
+      required this.onPressed})
       : super(key: key);
 
   final bool isPrimary;
@@ -26,9 +29,9 @@ class CustomTextButton extends StatelessWidget {
     } else {
       return TextButton(
           style: TextButton.styleFrom(primary: Colors.grey[400]),
-          child: const Text("CANCEL"),
+          child: child,
           onPressed: () {
-            Navigator.pop(context);
+            onPressed();
           });
     }
   }

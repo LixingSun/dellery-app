@@ -49,23 +49,44 @@ class SkillItem {
   Map<String, dynamic> toJson() => {'title': title, 'rating': rating};
 }
 
+class DiceOptionSet {
+  String name;
+  List<String> options;
+
+  DiceOptionSet({required this.name, required this.options});
+
+  factory DiceOptionSet.fromJson(Map<String, dynamic> json) {
+    final optionsData = json['options'] as List<dynamic>;
+
+    return DiceOptionSet(
+        name: json['name'],
+        options: optionsData.map((option) => option.toString()).toList());
+  }
+
+  Map<String, dynamic> toJson() => {'name': name, 'options': options};
+}
+
 class StoreObject {
   List<OngoingItem> inProgressList;
   List<String> toDoList;
   List<SkillItem> skillset;
   List<String> ideaList;
+  List<DiceOptionSet> diceOptionSetList;
 
   StoreObject(
       {required this.inProgressList,
       required this.toDoList,
       required this.skillset,
-      required this.ideaList});
+      required this.ideaList,
+      required this.diceOptionSetList});
 
   factory StoreObject.fromJson(Map<String, dynamic> json) {
-    final inProgressData = json['inProgressList'] as List<dynamic>;
-    final toDoData = json['toDoList'] as List<dynamic>;
-    final skillData = json['skillset'] as List<dynamic>;
-    final ideaListData = json['ideaList'] as List<dynamic>;
+    final inProgressData = (json['inProgressList'] ?? []) as List<dynamic>;
+    final toDoData = (json['toDoList'] ?? []) as List<dynamic>;
+    final skillData = (json['skillset'] ?? []) as List<dynamic>;
+    final ideaListData = (json['ideaList'] ?? []) as List<dynamic>;
+    final diceOptionSetListData =
+        (json['diceOptionSetList'] ?? []) as List<dynamic>;
 
     return StoreObject(
       inProgressList:
@@ -73,6 +94,9 @@ class StoreObject {
       toDoList: toDoData.map((item) => item.toString()).toList(),
       skillset: skillData.map((item) => SkillItem.fromJson(item)).toList(),
       ideaList: ideaListData.map((item) => item.toString()).toList(),
+      diceOptionSetList: diceOptionSetListData
+          .map((item) => DiceOptionSet.fromJson(item))
+          .toList(),
     );
   }
 
@@ -80,13 +104,18 @@ class StoreObject {
         'inProgressList': inProgressList,
         'toDoList': toDoList,
         'skillset': skillset,
-        'ideaList': ideaList
+        'ideaList': ideaList,
+        'diceOptionSetList': diceOptionSetList
       };
 }
 
 class LocalStorage extends ChangeNotifier {
-  StoreObject store =
-      StoreObject(inProgressList: [], toDoList: [], skillset: [], ideaList: []);
+  StoreObject store = StoreObject(
+      inProgressList: [],
+      toDoList: [],
+      skillset: [],
+      ideaList: [],
+      diceOptionSetList: []);
 
   List<OngoingItem> get inProgressList {
     return store.inProgressList;
@@ -102,6 +131,10 @@ class LocalStorage extends ChangeNotifier {
 
   List<String> get ideaList {
     return store.ideaList;
+  }
+
+  List<DiceOptionSet> get diceOptionSetList {
+    return store.diceOptionSetList;
   }
 
   Future<String> get _localPath async {
@@ -124,10 +157,15 @@ class LocalStorage extends ChangeNotifier {
 
       store = StoreObject.fromJson(json.decode(contents));
     } catch (e) {
+      stderr.writeln('Parse Store Failed');
       stderr.writeln(e);
       // If encountering an error, return 0
       store = StoreObject(
-          inProgressList: [], toDoList: [], skillset: [], ideaList: []);
+          inProgressList: [],
+          toDoList: [],
+          skillset: [],
+          ideaList: [],
+          diceOptionSetList: []);
     } finally {
       notifyListeners();
     }
@@ -198,6 +236,13 @@ class LocalStorage extends ChangeNotifier {
 
   void deleteIdeaItem(String item) {
     store.ideaList.remove(item);
+    notifyListeners();
+
+    writeStore(store);
+  }
+
+  void addDiceOptionSet(name, options) {
+    store.diceOptionSetList.add(DiceOptionSet(name: name, options: options));
     notifyListeners();
 
     writeStore(store);

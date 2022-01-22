@@ -1,5 +1,6 @@
 import 'package:dellery_app/components/button.dart';
 import 'package:dellery_app/pages/dice/dice.dart';
+import 'package:dellery_app/store.dart';
 import 'package:flutter/material.dart';
 
 class ToolCell extends StatelessWidget {
@@ -37,9 +38,17 @@ class ToolCell extends StatelessWidget {
   }
 }
 
-class RestAreaContent extends StatelessWidget {
-  const RestAreaContent({Key? key}) : super(key: key);
+class RestAreaContent extends StatefulWidget {
+  const RestAreaContent({Key? key, required this.localStorage})
+      : super(key: key);
 
+  final LocalStorage localStorage;
+
+  @override
+  _RestAreaContentState createState() => _RestAreaContentState();
+}
+
+class _RestAreaContentState extends State<RestAreaContent> {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
@@ -47,8 +56,13 @@ class RestAreaContent extends StatelessWidget {
           icon: Icons.crop_square,
           title: "Dice",
           onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const DicePage()));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => DicePage(
+                          presetList: widget.localStorage.diceOptionSetList,
+                          localStorage: widget.localStorage,
+                        )));
           })
     ]);
   }
